@@ -1,0 +1,44 @@
+{
+  "board": "AI Bootcamp Sandbox",
+  "statuses": ["To Do", "In Progress", "In Review", "Done"],
+  "cards": [
+    {
+      "id": "BOOT-101",
+      "title": "Search is slow and people are missing",
+      "status": "To Do",
+      "assignee": "Andrijana",
+      "linkedTicket": "tickets/module-1-basic/ticket-00-vague.md",
+      "description": "Reported by a stakeholder. Needs refinement into an SDD spec before development.",
+      "comments": []
+    },
+    {
+      "id": "BOOT-102",
+      "title": "Case-insensitive role search and default active status in filterUsers",
+      "status": "Done",
+      "assignee": "Marko",
+      "linkedTicket": "tickets/module-1-basic/ticket-01-sdd.md",
+      "description": "Fix filterUsers so that role matching ignores casing and an omitted active argument defaults to true.",
+      "comments": [
+        { "author": "Marko", "text": "Should be fine now, closing." }
+      ]
+    },
+    {
+      "id": "BOOT-103",
+      "title": "Data quality issues in team_metrics.csv",
+      "status": "To Do",
+      "assignee": "Jelena",
+      "linkedTicket": "data/team_metrics.csv",
+      "description": "Profile the CSV: missing hours_logged values, inconsistent date formats and inconsistent role casing.",
+      "comments": []
+    },
+    {
+      "id": "BOOT-104",
+      "title": "Run the ticket-to-pr pipeline for TICKET-01",
+      "status": "To Do",
+      "assignee": "Ivan",
+      "linkedTicket": "tickets/module-2-advanced/ticket-03-orchestration-pipeline.md",
+      "description": "Use the Planner, Feature Builder, Test Author and Reviewer chain, stopping at the human gate.",
+      "comments": []
+    }
+  ]
+}

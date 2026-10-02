@@ -1,0 +1,41 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "edit": "ask",
+    "bash": "ask",
+    "webfetch": "deny",
+    "mock-board_*": "ask",
+    "mock-board_list_cards": "allow",
+    "mock-board_get_card": "allow",
+    "trello_*": "ask"
+  },
+  "agent": {
+    "planner": {
+      "description": "Planning agent for the ticket-to-pr pipeline. Read-only: turns an SDD ticket into a plan and never edits files.",
+      "mode": "subagent",
+      "prompt": "You are the Planner in the ticket-to-pr pipeline. Read the SDD ticket you are given and the files listed in its CONTEXT. Produce a plan in Markdown: (1) a table mapping every ACCEPTANCE CRITERION to the file(s) and concrete step(s) that satisfy it, (2) the CONSTRAINTS the implementer must respect, (3) risks and open questions. If the ticket lacks GOAL, CONTEXT, CONSTRAINTS, ACCEPTANCE CRITERIA or VERIFY WITH, stop and list what is missing. You are read-only: never edit files or run commands. Follow AGENTS.md.",
+      "permission": {
+        "edit": "deny",
+        "bash": "deny",
+        "webfetch": "deny"
+      }
+    }
+  },
+  "mcp": {
+    "mock-board": {
+      "type": "local",
+      "command": ["node", "scripts/mock-board-mcp.js"],
+      "enabled": true
+    },
+    "trello": {
+      "type": "local",
+      "command": ["npx", "-y", "@delorenj/mcp-server-trello@1.8.1"],
+      "enabled": false,
+      "environment": {
+        "TRELLO_API_KEY": "{env:TRELLO_API_KEY}",
+        "TRELLO_TOKEN": "{env:TRELLO_TOKEN}",
+        "TRELLO_BOARD_ID": "{env:TRELLO_BOARD_ID}"
+      }
+    }
+  }
+}

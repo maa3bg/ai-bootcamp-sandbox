@@ -49,3 +49,7 @@ Desktop.ini
 .tmp/
 tmp/
 
+
+# Agent pipeline (ticket-to-pr) worktrees and run artifacts
+.worktrees/
+.pipeline-runs/
