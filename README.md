@@ -11,7 +11,7 @@ Before joining the first live online session, **you must** complete the followin
    git clone <YOUR_GITHUB_REPOSITORY_URL>
    cd ai-bootcamp-sandbox
 
-    npm install
+    npm ci
     bash scripts/smoke-test.sh
    
    & 'C:\Program Files\Git\bin\bash.exe' scripts/smoke-test.sh (windows)
