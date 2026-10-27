@@ -1,11 +1,12 @@
 {
   "name": "ai-bootcamp-sandbox",
   "version": "1.0.0",
-  "description": "Sandbox repo",
+  "description": "Hands-on sandbox for the AI Bootcamp: agentic loops, spec-driven development, guardrails, MCP and multi-agent orchestration",
   "main": "src/App.js",
   "scripts": {
     "test": "jest",
-    "start": "node src/App.js"
+    "start": "node src/App.js",
+    "check": "node scripts/self-check.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5"

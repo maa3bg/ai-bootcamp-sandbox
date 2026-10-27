@@ -33,6 +33,10 @@ Delegate to the `feature-builder` subagent with the ticket and `plan.md`. Tell i
 `.worktrees/<id>`, to run commands as `cd .worktrees/<id> && <command>`, and to commit on `feature/<id>` when the
 ticket's VERIFY WITH commands pass.
 
+After it reports back, check isolation before moving on: `git -C .worktrees/<id> log --oneline main..HEAD` must show
+its commit, and `git status --porcelain --untracked-files=no` in the main checkout must print nothing. If the main
+checkout was changed, stop and report it to the human instead of continuing.
+
 ## 4. Test Author
 Delegate to the `test-author` subagent with the ticket and the output of `git -C .worktrees/<id> diff main`. Same
 working-directory rule. It commits its tests on `feature/<id>`. If tests fail because of the product code, go back

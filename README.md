@@ -1,7 +1,7 @@
 # 🎓 ai-bootcamp-sandbox: From Chatbot to Agent Orchestration
 
 Welcome to the AI Bootcamp! This repository is your personal sandbox for a hands-on, two-module online course for
-**developers, QA engineers and data analysts**. You will learn how AI agents reason in loops, how precise
+**developers, QA engineers, data analysts, Product Owners and Agile coaches**. You will learn how AI agents reason in loops, how precise
 specifications steer them, how guardrails keep them safe, and how several agents cooperate, all before you
 onboard onto **Worca**.
 
@@ -10,6 +10,9 @@ and a set of agent definitions. The focus is on *how agents work*, not on the co
 
 > ⚠️ **The test suite fails on purpose.** `npm test` reports 2 failing tests until you fix the bugs during
 > Module 1. Do not fix them before the session!
+
+> 🧭 **Learning on your own, without a trainer?** Start with [`self-paced/README.md`](self-paced/README.md). It turns
+> both modules into six step-by-step labs with answer keys and a self-check command (`npm run check -- lab1`).
 
 ---
 
@@ -24,7 +27,8 @@ and a set of agent definitions. The focus is on *how agents work*, not on the co
 | [OpenCode](https://opencode.ai) | latest | The agent runtime used in the exercises (`npm install -g opencode-ai`) |
 | [Trello](https://trello.com) account | free plan | Tracking the capstone ticket (needed for the last exercise only) |
 
-You also need an LLM provider configured in OpenCode (`opencode auth login`). Your trainer will share the details.
+You also need an LLM provider configured in OpenCode (`opencode auth login`). Use the provider and credentials your
+organisation gives you for this course (see [`self-paced/README.md`](self-paced/README.md)).
 After installing the GitHub CLI, open a new terminal and run `gh auth login`.
 
 ### 2. Clone and install
@@ -43,8 +47,11 @@ Windows PowerShell:
 ```powershell
 & 'C:\Program Files\Git\bin\bash.exe' scripts/smoke-test.sh
 ```
-The script checks Node.js (v20+), Git, the GitHub CLI and network/proxy connectivity.
+The script checks Node.js (v20+), Git, the GitHub CLI, OpenCode and network/proxy connectivity.
 If you see **`[ALL GREEN]`**, you are ready for the bootcamp! 🎉
+
+Not going to open pull requests (for example Product Owners or Agile coaches)? Run
+`SMOKE_SKIP_GH=1 bash scripts/smoke-test.sh` to treat a missing GitHub CLI as a warning.
 
 Behind a corporate proxy? Set `HTTPS_PROXY` / `HTTP_PROXY` before running the script. You can point the network
 check at another URL with `SMOKE_TEST_ENDPOINT=<url>`.
@@ -84,7 +91,7 @@ npm test    # 1 passing, 2 failing: this is expected
   "just fix the bug" and watch the safety boundary hold.
 - **1.5 Q&A & Wrap-up.**
 
-### MODULE 2: MCP Protocol, Packaged Skills & Multi-Agent Orchestration (3.0 h)
+### MODULE 2: MCP Protocol, Packaged Skills & Multi-Agent Orchestration (3.25 h)
 
 | # | Session | Duration | Sandbox material |
 |---|---------|----------|------------------|
@@ -114,6 +121,10 @@ npm test    # 1 passing, 2 failing: this is expected
 | [`qa-02-data-profiling.md`](tickets/practice/qa-02-data-profiling.md) | QA, data analysts | Build a read-only `data-profiler` agent and profile a messy CSV |
 | [`dev-01-spec-then-build.md`](tickets/practice/dev-01-spec-then-build.md) | Developers | Write the SDD spec yourself, have it reviewed, then let an agent build it |
 | [`dev-02-path-scoped-agent.md`](tickets/practice/dev-02-path-scoped-agent.md) | Developers | Path-scoped permissions and your own slash command |
+| [`po-01-request-to-spec.md`](tickets/practice/po-01-request-to-spec.md) | Product Owners | Interrogate a vague stakeholder request with a read-only agent, then write the spec |
+| [`po-02-board-refinement-mcp.md`](tickets/practice/po-02-board-refinement-mcp.md) | Product Owners | Refine and de-duplicate board cards through MCP, approving every write |
+| [`coach-01-sprint-health.md`](tickets/practice/coach-01-sprint-health.md) | Agile coaches, Scrum Masters | A read-only agent that prepares a retro from sprint data, without judging people |
+| [`coach-02-retro-skill.md`](tickets/practice/coach-02-retro-skill.md) | Agile coaches, Scrum Masters | Package retro synthesis as a reusable skill |
 | [`ticket-04-team-hours-report.md`](tickets/capstone/ticket-04-team-hours-report.md) | Everyone | **Capstone:** requirement → spec → Trello card → `/ticket-to-pr` → human gate → PR |
 
 The capstone uses a real Trello board through the Trello MCP server. Setup steps (account, API key, token, board ID)
@@ -133,10 +144,15 @@ ai-bootcamp-sandbox/
 ├── tests/filters.test.js             # Jest tests: 2 fail until the bugs are fixed
 ├── data/
 │   ├── team_metrics.csv              # Messy dataset for data-profiling exercises
-│   └── mock-board.json               # Seed data for the mock Jira/Trello board
+│   ├── mock-board.json               # Seed data for the mock Jira/Trello board
+│   ├── sprint-history.csv            # Sprint data for the Agile coach track
+│   ├── retro-notes.md                # Raw retro notes for the Agile coach track
+│   └── stakeholder-requests.md       # Vague requests for the Product Owner track
 ├── scripts/
 │   ├── smoke-test.sh                 # Pre-work environment check
+│   ├── self-check.js                 # Checks a lab result: npm run check -- <lab>
 │   └── mock-board-mcp.js             # Dependency-free mock MCP server (stdio)
+├── self-paced/                       # Trainer-free edition: labs 0-5, concepts, reference solutions
 ├── tickets/
 │   ├── module-1-basic/
 │   │   ├── ticket-00-vague.md        # The "bad" ticket
@@ -144,7 +160,7 @@ ai-bootcamp-sandbox/
 │   ├── module-2-advanced/
 │   │   ├── ticket-02-mcp-integration.md
 │   │   └── ticket-03-orchestration-pipeline.md
-│   ├── practice/                     # Track exercises: qa-01, qa-02, dev-01, dev-02
+│   ├── practice/                     # Track exercises: qa-, dev-, po- and coach-
 │   └── capstone/ticket-04-team-hours-report.md
 └── .opencode/
     ├── opencode.json                 # Global permissions, planner agent, MCP servers (mock-board, trello)
@@ -155,11 +171,11 @@ ai-bootcamp-sandbox/
 
 ## 📏 Ground Rules
 All agents, and all participants, follow [`AGENTS.md`](AGENTS.md): English only, no credentials in the repo,
-no hardcoded configuration, lint-clean code, and **nothing is "Done" until `npm test` passes**.
+no hardcoded configuration, code that matches the existing style, and **nothing is "Done" until `npm test` passes**.
 
 ## 🆘 Troubleshooting
 - **`npm ci` / `npm install` fails with `ENOTFOUND` or a timeout:** check your proxy settings
   (`npm config get proxy`, `npm config get https-proxy`) and your registry (`npm config get registry`).
-- **The smoke test fails on the network check:** set `HTTPS_PROXY`, connect to the VPN, or ask your trainer which
+- **The smoke test fails on the network check:** set `HTTPS_PROXY`, connect to the VPN, or ask your IT team which
   endpoint to use for `SMOKE_TEST_ENDPOINT`.
 - **Windows:** run the bash scripts from Git Bash or through the `bash.exe` command shown above.

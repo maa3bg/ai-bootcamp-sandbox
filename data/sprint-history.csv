@@ -1,0 +1,7 @@
+sprint,start_date,end_date,committed_points,completed_points,carried_over_points,unplanned_points,blocked_days,team_size,notes
+S1,2026-07-06,2026-07-17,30,27,3,2,1,5,
+S2,2026-07-20,2026-07-31,32,24,8,6,3,5,Two people on holiday
+S3,2026-08-03,14/08/2026,30,30,0,1,0,5,
+S4,2026-08-17,2026-08-28,34,22,12,9,5,5,Production incident in week 2
+S5,2026-08-31,2026-09-11,28,,6,4,2,4,Completed points not recorded
+S6,2026-09-14,2026-09-25,30,26,4,5,2,5,

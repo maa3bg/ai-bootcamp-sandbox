@@ -71,4 +71,4 @@ TODO (the one command)
 - [ ] The PR is merged and `npm test` passes on `main`.
 - [ ] The Trello card is in `Done`, and its comments show every stage plus the PR link.
 - [ ] No credentials appear in the repository or the PR: searching the history for the first 8 characters of
-      your token (`git log -p --all | grep <first-8-chars>`) finds nothing.
+      your token (`git log -p --all | grep <first-8-chars>`, run in Git Bash on Windows) finds nothing.

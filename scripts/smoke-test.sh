@@ -8,6 +8,8 @@
 #   MIN_NODE_MAJOR        Minimum Node.js major version   (default: 20)
 #   SMOKE_TEST_ENDPOINT   URL for the network/proxy check (default: https://api.github.com)
 #   SMOKE_TEST_TIMEOUT    Network timeout in seconds      (default: 10)
+#   SMOKE_SKIP_GH         Set to 1 to treat a missing GitHub CLI as a warning
+#                         (for learners who will not open pull requests)
 #   NO_COLOR              Set to any value to disable colored output
 
 set -u
@@ -75,9 +77,22 @@ if command -v gh >/dev/null 2>&1; then
   if ! gh auth status >/dev/null 2>&1; then
     warn "gh is installed but not authenticated. Run 'gh auth login' before Module 2."
   fi
+elif [ "${SMOKE_SKIP_GH:-}" = "1" ]; then
+  warn "GitHub CLI ('gh') is not installed. Skipped (SMOKE_SKIP_GH=1): you will not be able to open pull requests."
 else
   fail "GitHub CLI ('gh') is not installed. It is needed for the ticket-to-PR pipeline in Module 2."
   hint "Install it from https://cli.github.com"
+  hint "Not opening pull requests (for example Product Owners, Agile coaches)? Re-run with SMOKE_SKIP_GH=1."
+fi
+
+# 3b. OpenCode (the agent runtime used in every exercise)
+section "3b. OpenCode"
+if command -v opencode >/dev/null 2>&1; then
+  pass "OpenCode $(opencode --version 2>/dev/null | head -n 1)"
+else
+  fail "OpenCode is not installed. Every exercise runs in OpenCode."
+  hint "Install it with: npm install -g opencode-ai   (then open a new terminal)"
+  hint "Then connect a model provider with: opencode auth login"
 fi
 
 # 4. Network / proxy connectivity

@@ -7,8 +7,9 @@ strictly follow these rules. Agent-specific files in `.opencode/agents/` add to 
    another language.
 
 2. **Code Quality**:
-   - All new or changed code must comply with the project's ESLint rules and match the style of the surrounding
-     code (CommonJS modules, naming, quotes, comment density).
+   - All new or changed code must match the style of the surrounding code: CommonJS modules, `const`/`let` (never
+     `var`), single quotes, semicolons, 2-space indentation, camelCase names and a similar comment density.
+     (The sandbox has no linter installed, so these style rules are the reference.)
    - Avoid hardcoded values. Use configuration variables or environment properties (`process.env`, loaded with
      `dotenv`; document new variables in `.env.example`).
 
@@ -26,4 +27,4 @@ strictly follow these rules. Agent-specific files in `.opencode/agents/` add to 
    Never try to work around a guardrail.
 
 7. **Training Bugs**: `src/utils/filters.js` contains intentional bugs used in the bootcamp exercises. Fix them only
-   when a ticket explicitly asks you to.
+   when a ticket or the exercise instructions explicitly ask you to, and never on the `main` branch.
