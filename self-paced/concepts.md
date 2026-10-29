@@ -38,7 +38,7 @@ where guardrails live.
 
 | Part | What it is | In this sandbox |
 | --- | --- | --- |
-| Model | Reasons and picks the next step | The provider you connect with `opencode auth login` |
+| Model | Reasons and picks the next step | One of the free models OpenCode ships with (`/models` shows them) |
 | Tools | What it can do | Read, search, edit, bash, web fetch, and MCP servers |
 | Context | What it knows | `AGENTS.md`, the agent's own prompt, the ticket, every file it has read |
 | Guardrails | What it may do | Permissions per tool: `allow`, `ask` or `deny` |

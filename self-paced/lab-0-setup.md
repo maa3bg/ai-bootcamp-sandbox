@@ -1,7 +1,7 @@
 # Lab 0: Setup
 
-**Time:** 30 minutes · **You need:** a computer where you can install software, and model access from your
-organisation.
+**Time:** 30 minutes · **You need:** a computer where you can install software. No AI account is needed: OpenCode
+includes free models.
 
 ## You will learn
 - How to get the sandbox running.
@@ -86,14 +86,18 @@ Open a new terminal, run `npm ci` again if it failed, then run the smoke test ag
 network check prints `Using proxy from HTTPS_PROXY`. (In Git Bash, use `export HTTPS_PROXY="http://<proxy-host>:<port>"`
 instead of `$env:`.) On macOS this is normally not needed.
 
-### 4. Connect a model
+### 4. Start OpenCode and pick a model
+
+No account, API key or sign-up is needed: OpenCode comes with several **free models** built in. Start it inside the
+repository folder:
 
 ```bash
-opencode auth login
+opencode
 ```
 
-Choose the provider your organisation gave you and paste the credentials when asked. Credentials stay in OpenCode's
-own settings, never in this repository.
+Then type `/models`, look at the list (the free models are marked), and pick one. The exact list changes over time.
+If your organisation later gives you its own model provider, `opencode auth login` connects it, but you do not need
+that for this course.
 
 ### 5. Say hello to an agent
 
@@ -134,7 +138,7 @@ npm run check -- lab0
 | `npm ci` fails with `ENOTFOUND` or a timeout | You are probably behind a company proxy. On Windows, follow *Windows only: set up the company proxy* above |
 | Windows: `bash` is not recognised in PowerShell | Use the full path: `& 'C:\Program Files\Git\bin\bash.exe' scripts/smoke-test.sh`, or open Git Bash |
 | `opencode: command not found` | Open a new terminal after installing. On Windows, check that npm's global folder is on your PATH |
-| OpenCode asks for a provider or shows an auth error | Run `opencode auth login` again with the details from your organisation |
+| OpenCode shows no models or cannot reach one | Type `/models` inside OpenCode and pick a free model; on a company network, set up the proxy first (step 3) |
 | All 3 tests pass already | Someone fixed the training bugs on `main`. Run `git checkout origin/main -- src/utils/filters.js` |
 
 **Next:** read [concepts.md](concepts.md) sections 1–5, then [Lab 1](lab-1-agentic-loop.md).

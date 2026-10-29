@@ -9,8 +9,8 @@ You do not need to be a developer. Every lab tells you exactly what to type, wha
 your result. Product Owners, Agile coaches, QA engineers, analysts and developers all follow the same core labs,
 then pick the track for their role.
 
-> **Model access.** OpenCode needs a connection to a language model. Use the provider and credentials your
-> organisation gave you for this course. <!-- ORGANIZER: replace this sentence with your provider instructions. -->
+> **Model access.** Nothing to set up: OpenCode includes several free models. Start `opencode` and type `/models`
+> to see them and pick one. No account or API key is needed.
 
 ---
 

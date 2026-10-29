@@ -24,7 +24,7 @@ You can take it **on your own, at your own pace** (this page walks you through i
 | **Time** | About 6 hours in total: 4.5 hours of core labs, plus 1–1.5 hours for your role (about 2 hours for Product Owners). Setup can take longer the first time |
 | **Pace** | Your own. Spread it over 3–4 sittings in 1–2 weeks. Only Lab 5 needs an uninterrupted hour |
 | **What you do** | Give an agent a task, watch what it does, approve or reject each change, and check the result |
-| **What you need** | A computer where you can install software, model access from your organisation, and curiosity |
+| **What you need** | A computer where you can install software, and curiosity. No AI account needed: OpenCode includes free models |
 | **What you do not need** | Coding skills, AI knowledge, or a GitHub account (that is only for the optional last step of Lab 5) |
 | **Safety** | Nothing here touches real code or data. Agents ask before every change, and you can start any lab over |
 
@@ -155,17 +155,20 @@ instead of `$env:`. If `npm install -g opencode-ai` or `npm ci` failed earlier, 
 
 On macOS this step is normally not needed.
 
-### Step 4: Connect OpenCode to a model (5 min)
+### Step 4: Start OpenCode and pick a model (2 min)
+
+No account, API key or sign-up is needed: OpenCode comes with several **free models** built in. Start it once, inside
+the project folder, and look at the list:
 
 ```bash
-opencode auth login
+opencode
 ```
 
-Choose the provider your organisation gave you for this course and paste the credentials when asked. They are
-stored in OpenCode's own settings, never in this project.
-<!-- ORGANIZER: replace this line with your model provider and how learners get credentials. -->
+Inside OpenCode, type `/models`. You will see the available models, including the free ones; pick one and you are
+set. (The exact list changes over time. If your organisation later gives you its own model provider, `opencode auth
+login` connects it, but you do not need that for this course.)
 
-Then take a first look at the practice project:
+Quit OpenCode (type `/exit`) and take a first look at the practice project:
 
 ```bash
 npm start   # shows a team list and two searches
@@ -265,7 +268,7 @@ Go through these in order, and give each about 10 minutes:
 | --- | --- |
 | `npm ci` fails with `ENOTFOUND` or a timeout | You are probably behind a company proxy. On Windows, follow *Windows: the network check fails?* in Step 3; check the result with `npm config get https-proxy` |
 | `opencode: command not found` | Open a **new** terminal after installing. On Windows, make sure npm's global folder is on your PATH |
-| OpenCode asks for a provider or shows an authentication error | Run `opencode auth login` again with the details from your organisation |
+| OpenCode shows no models or cannot reach one | Type `/models` inside OpenCode and pick one of the free models. On a company network, set up the proxy first (Step 3) |
 | The smoke test fails on the network check | Windows: set up the proxy as shown in Step 3. Otherwise connect to the VPN, or ask your IT team which address to use for `SMOKE_TEST_ENDPOINT` |
 | All 3 tests already pass on `main` | The training bugs were fixed by mistake. Run `git checkout origin/main -- src/utils/filters.js` |
 | Windows: a `bash` command does not work | Run it in **Git Bash**, or from PowerShell with `& 'C:\Program Files\Git\bin\bash.exe' scripts/smoke-test.sh` |

@@ -93,7 +93,7 @@ if command -v opencode >/dev/null 2>&1; then
 else
   fail "OpenCode is not installed. Every exercise runs in OpenCode."
   hint "Install it with: npm install -g opencode-ai   (then open a new terminal)"
-  hint "Then connect a model provider with: opencode auth login"
+  hint "Free models are built in: start it with 'opencode' and type /models to pick one."
 fi
 
 # 4. Network / proxy connectivity
