@@ -173,6 +173,71 @@ function checkNoTrackedChanges() {
   }
 }
 
+function sectionAfter(content, heading) {
+  const parts = content.split(new RegExp(`^##\\s+${heading}\\s*$`, 'm'));
+  return parts.length > 1 ? parts[1].split(/^##\s/m)[0] : null;
+}
+
+function checkBacklog(content) {
+  const epics = (content.match(/^##\s+EPIC:/gm) || []).length;
+  if (epics === 1) {
+    pass('One EPIC.');
+  } else {
+    fail(`Found ${epics} EPIC headings; exactly one is needed.`, 'Use: ## EPIC: <title>');
+  }
+  const stories = content.split(/^###\s+STORY:/m).slice(1).map((part) => part.split(/^##\s/m)[0]);
+  if (stories.length >= 3 && stories.length <= 6) {
+    pass(`${stories.length} STORY blocks (3-6 needed).`);
+  } else {
+    fail(`Found ${stories.length} STORY blocks; 3-6 are needed.`, 'Use: ### STORY: <title>');
+  }
+  const incomplete = [];
+  stories.forEach((story) => {
+    const title = story.split('\n')[0].trim() || '(no title)';
+    const missing = [];
+    if (!/\bAs an?\b[\s\S]*\bso that\b/i.test(story)) {
+      missing.push('no user-story sentence');
+    }
+    const criteria = ((story.split(/Acceptance criteria:?/i)[1] || '').split(/Sub-tasks:?/i)[0]
+      .match(/^\s*\d+\.\s+\S/gm) || []).length;
+    if (criteria < 2) {
+      missing.push(`${criteria} acceptance criteria (2+ needed)`);
+    }
+    if (!/SUBTASK:/.test(story)) {
+      missing.push('no sub-task');
+    }
+    if (missing.length > 0) {
+      incomplete.push(`"${title}": ${missing.join(', ')}`);
+    }
+  });
+  if (stories.length > 0 && incomplete.length === 0) {
+    pass('Every story has a user-story sentence, 2+ acceptance criteria and a sub-task.');
+  }
+  incomplete.forEach((problem) => fail(`Story ${problem}.`));
+  const outOfScope = sectionAfter(content, 'OUT OF SCOPE');
+  if (outOfScope === null) {
+    fail('No ## OUT OF SCOPE section.');
+  } else {
+    pass('OUT OF SCOPE section present.');
+  }
+  const questions = sectionAfter(content, 'OPEN QUESTIONS');
+  const questionCount = questions ? (questions.match(/^\s*[-*]\s+\S/gm) || []).length : 0;
+  if (questionCount >= 2) {
+    pass(`${questionCount} open questions.`);
+  } else {
+    fail(`${questionCount} open question(s) found; at least 2 are needed under ## OPEN QUESTIONS.`);
+  }
+  const storyTitles = stories.map((story) => story.split('\n')[0]).join(' ');
+  if (/monthly/i.test(outOfScope || '') || /monthly/i.test(storyTitles)) {
+    pass('Monthly totals are handled on purpose.');
+  } else {
+    warn('Monthly totals are not mentioned in OUT OF SCOPE or in a story title. Did you decide on them?');
+  }
+  if (/\bTODO\b|<(title|role|capability|benefit)>/.test(content)) {
+    fail('The file still contains TODO or template placeholders such as <title>.');
+  }
+}
+
 const CHECKS = {
   lab0: {
     title: 'Lab 0: setup',
@@ -384,6 +449,20 @@ const CHECKS = {
     run() {
       checkNoTrackedChanges();
       info('The board itself cannot be checked from here: compare your final get_card output with the answer key.');
+    },
+  },
+  'po-03': {
+    title: 'PO-03: from a requirement to tickets',
+    run(base) {
+      const file = 'tickets/practice/po-03-my-backlog.md';
+      if (exists(file)) {
+        checkBacklog(read(file));
+      } else {
+        fail(`${file} does not exist.`, 'Save your breakdown under exactly this name.');
+      }
+      checkUnchanged(base, 'src/');
+      checkUnchanged(base, 'data/');
+      info('The board cannot be checked from here: compare list_cards and get_card on the epic with your file.');
     },
   },
   'coach-01': {

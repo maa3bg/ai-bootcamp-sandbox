@@ -9,6 +9,7 @@ named in its first comment and restart OpenCode.
 | --- | --- | --- |
 | Lab 3 | [agents/spec-checker.md](agents/spec-checker.md) | `.opencode/agents/spec-checker.md` |
 | PO-01 | [agents/story-refiner.md](agents/story-refiner.md) | `.opencode/agents/story-refiner.md` |
+| PO-03 | Answer key below | (uses the default build agent) |
 | COACH-01 | [agents/sprint-health.md](agents/sprint-health.md) | `.opencode/agents/sprint-health.md` |
 | COACH-02 | [skills/retro-synthesis/SKILL.md](skills/retro-synthesis/SKILL.md) | `.opencode/skills/retro-synthesis/SKILL.md` |
 | Lab 2 | `tickets/module-1-basic/ticket-01-sdd.md` | (already in the repository) |
@@ -43,6 +44,38 @@ investigation, but then its description should say exactly that.
 BOOT-102 is marked Done, but on `main` 2 of 3 tests fail. Its acceptance-criteria comment should be checkable by a
 non-developer, for example: "Searching for Developer finds both Marko and Ivan" and "`npm start` reports 2 active
 developers in both searches".
+</details>
+
+<details>
+<summary><b>PO-03</b>: one good breakdown of REQ-4</summary>
+
+There is more than one right answer. This is a breakdown a team could start on; compare the shape, not the wording.
+
+**EPIC: Weekly team hours report.** Team leads and Finance get hours they can trust, from today's file, with one
+command.
+
+| Story | User story | Example acceptance criteria | Example sub-tasks |
+| --- | --- | --- | --- |
+| 1. Read today's file safely | As a team lead, I want the report to run on the current file, so that I always get a result | Running it on `data/team_metrics.csv` finishes without an error; a row without a name is skipped and reported | Handle both date formats; decide how empty hours are treated |
+| 2. Hours and people per role | As a team lead, I want hours and headcount per role, so that I see where time goes | `Developer` and `developer` are one role; each role shows total hours and number of people | Normalise role casing; decide how duplicate rows are counted |
+| 3. Data problems list | As a team lead, I want every data problem listed, so that I know whether to trust the numbers | Each problem shows its line number and reason; the 4 known problem lines (4, 5, 6, 7) all appear | List the checks to run; word the messages for non-developers |
+| 4. Hours per person for Finance | As a Finance analyst, I want hours per person as a CSV file, so that I can invoice | One row per person with name and hours; a duplicate row is not counted twice | Agree the CSV columns with Finance; choose where the file is written |
+| 5. One command | As a team lead, I want to run everything with one command, so that I do not need help | One documented command produces both outputs; it works on Windows and macOS | Add the command; document it in the README |
+
+**OUT OF SCOPE:** monthly totals (a separate, later story once weekly works), charts, other data sources.
+
+**OPEN QUESTIONS** worth asking the stakeholder:
+- Is the exact duplicate row (lines 3 and 6) counted once or twice?
+- Are missing hours zero, or is the row excluded from totals?
+- Which week is "weekly": the date in the file, or the calendar week the report runs?
+- Do `Pending` rows and inactive people count?
+- REQ-2 (Finance) asks for hours per person too: is story 4 the answer to REQ-2, and can they be linked?
+
+**On the board:** 1 Epic, 5 Stories with the Epic as `parent`, and about 10 Sub-tasks, each with its Story as
+`parent`. `get_card` on the Epic lists its 5 Stories as `children`.
+
+Common weaknesses: stories split by technical layer ("parse CSV", "write tests") instead of by user value; acceptance
+criteria without a concrete input; and monthly totals quietly added to story 2.
 </details>
 
 <details>

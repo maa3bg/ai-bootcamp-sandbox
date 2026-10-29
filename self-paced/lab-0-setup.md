@@ -37,13 +37,54 @@ npm ci
 
 ### 3. Run the smoke test
 
+macOS, Linux, or Git Bash on Windows:
+
 ```bash
 bash scripts/smoke-test.sh
 ```
 
-Not planning to open pull requests (for example as a Product Owner or Agile coach)? Run
-`SMOKE_SKIP_GH=1 bash scripts/smoke-test.sh` instead (in Git Bash; in PowerShell first run
-`$env:SMOKE_SKIP_GH=1`).
+Windows PowerShell:
+
+```powershell
+& 'C:\Program Files\Git\bin\bash.exe' scripts/smoke-test.sh
+```
+
+Not planning to open pull requests (for example as a Product Owner or Agile coach)? Skip the GitHub CLI check:
+
+```bash
+SMOKE_SKIP_GH=1 bash scripts/smoke-test.sh                        # macOS, Linux, Git Bash
+```
+
+```powershell
+$env:SMOKE_SKIP_GH = "1"                                          # Windows PowerShell
+& 'C:\Program Files\Git\bin\bash.exe' scripts/smoke-test.sh
+```
+
+#### Windows only: set up the company proxy
+
+The last check of the smoke test is the network connection. On a company network, Windows computers usually go
+through a proxy that command-line tools do not find by themselves. If that check fails, or `npm ci` failed with
+`ENOTFOUND` or a timeout, ask your IT team for the proxy address and run this in PowerShell, with your address
+instead of `<proxy-host>:<port>`:
+
+```powershell
+# For the current terminal window
+$env:HTTPS_PROXY = "http://<proxy-host>:<port>"
+$env:HTTP_PROXY  = "http://<proxy-host>:<port>"
+
+# Permanently, for every new terminal window
+setx HTTPS_PROXY "http://<proxy-host>:<port>"
+setx HTTP_PROXY  "http://<proxy-host>:<port>"
+
+# For npm and Git
+npm config set proxy "http://<proxy-host>:<port>"
+npm config set https-proxy "http://<proxy-host>:<port>"
+git config --global http.proxy "http://<proxy-host>:<port>"
+```
+
+Open a new terminal, run `npm ci` again if it failed, then run the smoke test again. When the proxy is picked up, the
+network check prints `Using proxy from HTTPS_PROXY`. (In Git Bash, use `export HTTPS_PROXY="http://<proxy-host>:<port>"`
+instead of `$env:`.) On macOS this is normally not needed.
 
 ### 4. Connect a model
 
@@ -90,7 +131,8 @@ npm run check -- lab0
 
 | Problem | Fix |
 | --- | --- |
-| `npm ci` fails with `ENOTFOUND` or a timeout | You are probably behind a proxy: check `npm config get https-proxy` and ask your IT team for the proxy address |
+| `npm ci` fails with `ENOTFOUND` or a timeout | You are probably behind a company proxy. On Windows, follow *Windows only: set up the company proxy* above |
+| Windows: `bash` is not recognised in PowerShell | Use the full path: `& 'C:\Program Files\Git\bin\bash.exe' scripts/smoke-test.sh`, or open Git Bash |
 | `opencode: command not found` | Open a new terminal after installing. On Windows, check that npm's global folder is on your PATH |
 | OpenCode asks for a provider or shows an auth error | Run `opencode auth login` again with the details from your organisation |
 | All 3 tests pass already | Someone fixed the training bugs on `main`. Run `git checkout origin/main -- src/utils/filters.js` |

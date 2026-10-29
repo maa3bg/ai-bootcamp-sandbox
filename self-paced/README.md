@@ -51,7 +51,7 @@ reading.
 | Developer | 0–5 | [DEV-01](../tickets/practice/dev-01-spec-then-build.md), [DEV-02](../tickets/practice/dev-02-path-scoped-agent.md) |
 | QA engineer | 0–5 | [QA-01](../tickets/practice/qa-01-edge-case-hunt.md), [QA-02](../tickets/practice/qa-02-data-profiling.md) |
 | Data / business analyst | 0–4, 5 optional | [QA-02](../tickets/practice/qa-02-data-profiling.md), [COACH-01](../tickets/practice/coach-01-sprint-health.md) |
-| Product Owner | 0–4, 5 recommended | [PO-01](../tickets/practice/po-01-request-to-spec.md), [PO-02](../tickets/practice/po-02-board-refinement-mcp.md) |
+| Product Owner | 0–4, 5 recommended | [PO-01](../tickets/practice/po-01-request-to-spec.md), [PO-02](../tickets/practice/po-02-board-refinement-mcp.md), [PO-03](../tickets/practice/po-03-requirement-to-tickets.md) |
 | Agile Team Coach / Scrum Master | 0–4, 5 recommended | [COACH-01](../tickets/practice/coach-01-sprint-health.md), [COACH-02](../tickets/practice/coach-02-retro-skill.md) |
 | Everyone, to finish | all | [Capstone: TICKET-04](../tickets/capstone/ticket-04-team-hours-report.md) |
 
@@ -59,7 +59,7 @@ reading.
 `git checkout main && git checkout -b <exercise id>` (for example `po-01`). The exception is PO-02, which runs on
 `main` because it changes nothing in the repository.
 
-**Self-checks for tracks:** `qa-01`, `qa-02`, `dev-02`, `po-01`, `po-02`, `coach-01` and `coach-02` have one
+**Self-checks for tracks:** `qa-01`, `qa-02`, `dev-02`, `po-01`, `po-02`, `po-03`, `coach-01` and `coach-02` have one
 (`npm run check -- po-01`). DEV-01 and the capstone are checked with the commands in their own VERIFY WITH section.
 
 Reference solutions for the agents and skills you build are in [solutions/](solutions/). Try first, then compare.
@@ -76,6 +76,7 @@ Copy this list into your notes and tick it off.
 - [ ] Lab 5: `npm run check -- lab5`
 - [ ] Track exercise 1: `npm run check -- <exercise id>`, for example `po-01` (or its VERIFY WITH commands)
 - [ ] Track exercise 2
+- [ ] Track exercise 3 (Product Owners: PO-03)
 - [ ] Capstone (optional)
 
 ## Ground rules for this course

@@ -21,7 +21,7 @@ You can take it **on your own, at your own pace** (this page walks you through i
 
 | | |
 | --- | --- |
-| **Time** | About 6 hours in total: 4.5 hours of core labs, plus 1–1.5 hours for your role. Setup can take longer the first time |
+| **Time** | About 6 hours in total: 4.5 hours of core labs, plus 1–1.5 hours for your role (about 2 hours for Product Owners). Setup can take longer the first time |
 | **Pace** | Your own. Spread it over 3–4 sittings in 1–2 weeks. Only Lab 5 needs an uninterrupted hour |
 | **What you do** | Give an agent a task, watch what it does, approve or reject each change, and check the result |
 | **What you need** | A computer where you can install software, model access from your organisation, and curiosity |
@@ -72,7 +72,10 @@ You can take it **on your own, at your own pace** (this page walks you through i
 | [GitHub CLI](https://cli.github.com) | any recent | `gh --version`. Optional: only needed to publish a change at the end of Lab 5 |
 
 A **terminal** is the window where you type commands. **On Windows, use Git Bash** (installed together with Git)
-for every command in this course.
+for every command in this course; the only exception shown is running the smoke test from PowerShell in Step 3.
+
+> **Windows, on a company network?** If installing OpenCode or `npm ci` fails with `ENOTFOUND`, a timeout or a
+> certificate error, set up the proxy first (see *Windows: the network check fails?* in Step 3), then try again.
 
 ### Step 2: Get the practice project (5 min)
 
@@ -98,19 +101,59 @@ npm ci
 
 ### Step 3: Check your setup (5 min)
 
-```bash
-bash scripts/smoke-test.sh
+Run the check script from the project folder:
+
+- **macOS, Linux, or Git Bash on Windows:**
+  ```bash
+  bash scripts/smoke-test.sh
+  ```
+- **Windows PowerShell:**
+  ```powershell
+  & 'C:\Program Files\Git\bin\bash.exe' scripts/smoke-test.sh
+  ```
+
+The script checks Node.js, Git, the GitHub CLI, OpenCode and, as the last item, your network connection. **You are
+ready when the last lines say `[ALL GREEN]`.** If a line says `[FAIL]`, the line under it tells you how to fix it.
+
+Not planning to publish changes (for example as a Product Owner or Agile coach)? Run it like this instead, so a
+missing GitHub CLI is only a warning:
+
+- **macOS, Linux, or Git Bash on Windows:**
+  ```bash
+  SMOKE_SKIP_GH=1 bash scripts/smoke-test.sh
+  ```
+- **Windows PowerShell:**
+  ```powershell
+  $env:SMOKE_SKIP_GH = "1"
+  & 'C:\Program Files\Git\bin\bash.exe' scripts/smoke-test.sh
+  ```
+
+#### Windows: the network check fails? Set up the company proxy
+
+On a company network, Windows computers usually reach the internet through a proxy, and command-line tools do not
+pick it up by themselves. Ask your IT team for the proxy address (for example `http://proxy.yourcompany.com:8080`),
+then run this in **PowerShell**, with your address instead of `<proxy-host>:<port>`:
+
+```powershell
+# For the current terminal window
+$env:HTTPS_PROXY = "http://<proxy-host>:<port>"
+$env:HTTP_PROXY  = "http://<proxy-host>:<port>"
+
+# Permanently, for every new terminal window
+setx HTTPS_PROXY "http://<proxy-host>:<port>"
+setx HTTP_PROXY  "http://<proxy-host>:<port>"
+
+# For npm (npm ci, installing OpenCode) and for Git
+npm config set proxy "http://<proxy-host>:<port>"
+npm config set https-proxy "http://<proxy-host>:<port>"
+git config --global http.proxy "http://<proxy-host>:<port>"
 ```
 
-The script checks Node.js, Git, the GitHub CLI, OpenCode and your network connection. **You are ready when the last
-lines say `[ALL GREEN]`.** If a line says `[FAIL]`, the line under it tells you how to fix it.
+Then open a **new** terminal and run the smoke test again. When the proxy is picked up, the last check prints
+`Using proxy from HTTPS_PROXY`. In Git Bash, set the variables with `export HTTPS_PROXY="http://<proxy-host>:<port>"`
+instead of `$env:`. If `npm install -g opencode-ai` or `npm ci` failed earlier, run them again now.
 
-Not planning to publish changes (for example as a Product Owner or Agile coach)? Run this instead, so a missing
-GitHub CLI is only a warning:
-
-```bash
-SMOKE_SKIP_GH=1 bash scripts/smoke-test.sh
-```
+On macOS this step is normally not needed.
 
 ### Step 4: Connect OpenCode to a model (5 min)
 
@@ -159,7 +202,7 @@ Run `npm run check` on its own to list every check.
 
 ### Step 7: Your role track (1–1.5 hours)
 
-After Lab 4 or Lab 5, do the two exercises for your role. Each runs on its own branch:
+After Lab 4 or Lab 5, do the exercises for your role (two, or three for Product Owners). Each runs on its own branch:
 `git checkout main && git checkout -b <exercise id>` (PO-02 is the exception: it stays on `main`).
 
 | Your role | Lab 5 | Track exercises | What you practise |
@@ -167,7 +210,7 @@ After Lab 4 or Lab 5, do the two exercises for your role. Each runs on its own b
 | Developer | Yes | [DEV-01](tickets/practice/dev-01-spec-then-build.md), [DEV-02](tickets/practice/dev-02-path-scoped-agent.md) | Write a spec and let an agent build it; limit where an agent may write |
 | QA engineer | Yes | [QA-01](tickets/practice/qa-01-edge-case-hunt.md), [QA-02](tickets/practice/qa-02-data-profiling.md) | Find edge cases with a checklist skill; profile messy data |
 | Data or business analyst | Optional | [QA-02](tickets/practice/qa-02-data-profiling.md), [COACH-01](tickets/practice/coach-01-sprint-health.md) | Read-only agents that report data problems with evidence |
-| Product Owner | Recommended | [PO-01](tickets/practice/po-01-request-to-spec.md), [PO-02](tickets/practice/po-02-board-refinement-mcp.md) | Turn a vague stakeholder request into a spec; tidy up a task board |
+| Product Owner | Recommended | [PO-01](tickets/practice/po-01-request-to-spec.md), [PO-02](tickets/practice/po-02-board-refinement-mcp.md), [PO-03](tickets/practice/po-03-requirement-to-tickets.md) | Turn a vague stakeholder request into a spec; tidy up a task board; split a requirement into an epic, stories and sub-tasks on the board |
 | Agile coach or Scrum Master | Recommended | [COACH-01](tickets/practice/coach-01-sprint-health.md), [COACH-02](tickets/practice/coach-02-retro-skill.md) | Prepare a retro from sprint data without judging people; save it as a skill |
 
 Most exercises have a self-check (`npm run check -- po-01`); DEV-01 uses the commands in its own *VERIFY WITH*
@@ -181,9 +224,9 @@ all the way to a merged pull request, tracked on your own Trello board (2–3 ho
 
 You have completed the bootcamp when:
 
-- [ ] `bash scripts/smoke-test.sh` shows `[ALL GREEN]`
+- [ ] the smoke test (Step 3) shows `[ALL GREEN]`
 - [ ] `npm run check -- lab0` to `npm run check -- lab5` all pass
-- [ ] both exercises of your role track pass their check
+- [ ] the exercises of your role track pass their check
 - [ ] optional: your capstone pull request is merged
 
 Then share your result: <!-- ORGANIZER: say what to send and where, for example a screenshot of the passing checks. -->
@@ -220,10 +263,10 @@ Go through these in order, and give each about 10 minutes:
 
 | Problem | Fix |
 | --- | --- |
-| `npm ci` fails with `ENOTFOUND` or a timeout | You are probably behind a company proxy. Check `npm config get https-proxy` and ask your IT team for the proxy address |
+| `npm ci` fails with `ENOTFOUND` or a timeout | You are probably behind a company proxy. On Windows, follow *Windows: the network check fails?* in Step 3; check the result with `npm config get https-proxy` |
 | `opencode: command not found` | Open a **new** terminal after installing. On Windows, make sure npm's global folder is on your PATH |
 | OpenCode asks for a provider or shows an authentication error | Run `opencode auth login` again with the details from your organisation |
-| The smoke test fails on the network check | Set `HTTPS_PROXY`, connect to the VPN, or ask your IT team which address to use for `SMOKE_TEST_ENDPOINT` |
+| The smoke test fails on the network check | Windows: set up the proxy as shown in Step 3. Otherwise connect to the VPN, or ask your IT team which address to use for `SMOKE_TEST_ENDPOINT` |
 | All 3 tests already pass on `main` | The training bugs were fixed by mistake. Run `git checkout origin/main -- src/utils/filters.js` |
 | Windows: a `bash` command does not work | Run it in **Git Bash**, or from PowerShell with `& 'C:\Program Files\Git\bin\bash.exe' scripts/smoke-test.sh` |
 

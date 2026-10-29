@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Mock Jira/Trello MCP server for Module 2 (Exercise 2A).
+ * Mock Jira/Trello MCP server for Module 2 (Exercise 2A) and the PO track exercises.
  *
  * A dependency-free Model Context Protocol server speaking JSON-RPC 2.0 over stdio
  * (one JSON message per line). The board is loaded from a seed file and all changes
@@ -20,6 +20,8 @@ const BOARD_FILE = process.env.MOCK_BOARD_FILE
   : path.join(__dirname, '..', 'data', 'mock-board.json');
 
 const board = JSON.parse(fs.readFileSync(BOARD_FILE, 'utf8'));
+const CARD_TYPES = ['Epic', 'Story', 'Task', 'Sub-task'];
+const DEFAULT_CARD_TYPE = 'Story';
 
 const TOOLS = [
   {
@@ -39,6 +41,22 @@ const TOOLS = [
       type: 'object',
       properties: { id: { type: 'string', description: 'Card ID, e.g. BOOT-102' } },
       required: ['id'],
+    },
+  },
+  {
+    name: 'create_card',
+    description: 'Create a new card in the To Do column: an Epic, Story, Task or Sub-task, optionally under a parent card. WRITE action: requires human approval.',
+    annotations: { readOnlyHint: false, destructiveHint: false },
+    inputSchema: {
+      type: 'object',
+      properties: {
+        title: { type: 'string' },
+        type: { type: 'string', enum: CARD_TYPES },
+        parent: { type: 'string', description: 'ID of the parent card, e.g. BOOT-105. Required for a Sub-task.' },
+        description: { type: 'string', description: 'What the card is about, including its acceptance criteria' },
+        assignee: { type: 'string' },
+      },
+      required: ['title', 'type'],
     },
   },
   {
@@ -70,6 +88,12 @@ const TOOLS = [
   },
 ];
 
+function nextCardId() {
+  const numbers = board.cards.map((card) => Number(card.id.split('-')[1])).filter(Number.isFinite);
+  const prefix = board.cards.length > 0 ? board.cards[0].id.split('-')[0] : 'BOOT';
+  return `${prefix}-${Math.max(100, ...numbers) + 1}`;
+}
+
 function findCard(id) {
   const card = board.cards.find((candidate) => candidate.id === id);
   if (!card) {
@@ -81,10 +105,46 @@ function findCard(id) {
 const handlers = {
   list_cards: ({ status } = {}) => board.cards
     .filter((card) => !status || card.status === status)
-    .map(({ id, title, status: cardStatus, assignee, linkedTicket }) => ({
-      id, title, status: cardStatus, assignee, linkedTicket,
+    .map(({ id, title, type, parent, status: cardStatus, assignee, linkedTicket }) => ({
+      id, title, type: type || DEFAULT_CARD_TYPE, parent, status: cardStatus, assignee, linkedTicket,
     })),
-  get_card: ({ id }) => findCard(id),
+  get_card: ({ id }) => ({
+    ...findCard(id),
+    children: board.cards.filter((card) => card.parent === id).map((card) => card.id),
+  }),
+  create_card: ({ title, type, parent, description = '', assignee = '' }) => {
+    if (!title || !title.trim()) {
+      throw new Error('Card title must not be empty.');
+    }
+    if (!CARD_TYPES.includes(type)) {
+      throw new Error(`Invalid type "${type}". Valid types: ${CARD_TYPES.join(', ')}`);
+    }
+    if (type === 'Sub-task' && !parent) {
+      throw new Error('A Sub-task needs a parent card (a Story or Task).');
+    }
+    if (type === 'Epic' && parent) {
+      throw new Error('An Epic cannot have a parent card.');
+    }
+    if (parent) {
+      const parentType = findCard(parent).type || DEFAULT_CARD_TYPE;
+      if (parentType === 'Sub-task') {
+        throw new Error(`Card "${parent}" is a Sub-task and cannot have children.`);
+      }
+    }
+    const card = {
+      id: nextCardId(),
+      title: title.trim(),
+      type,
+      parent,
+      status: board.statuses[0],
+      assignee,
+      linkedTicket: '',
+      description,
+      comments: [],
+    };
+    board.cards.push(card);
+    return { id: card.id, type: card.type, parent: card.parent, status: card.status };
+  },
   update_card_status: ({ id, status }) => {
     if (!board.statuses.includes(status)) {
       throw new Error(`Invalid status "${status}". Valid statuses: ${board.statuses.join(', ')}`);

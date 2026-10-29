@@ -2,7 +2,8 @@
 # smoke-test.sh - Verifies that your machine is ready for the AI Bootcamp.
 #
 # Usage:
-#   bash scripts/smoke-test.sh
+#   bash scripts/smoke-test.sh                                    (macOS, Linux, Git Bash)
+#   & 'C:\Program Files\Git\bin\bash.exe' scripts/smoke-test.sh   (Windows PowerShell)
 #
 # Optional environment variables:
 #   MIN_NODE_MAJOR        Minimum Node.js major version   (default: 20)

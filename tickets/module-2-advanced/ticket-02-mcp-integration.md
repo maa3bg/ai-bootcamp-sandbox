@@ -13,6 +13,7 @@ report of the bootcamp board, then update **one** card, with every write approve
   |----------------------|-------|---------------------------------------------|
   | `list_cards`         | read  | List cards, optionally filtered by `status` |
   | `get_card`           | read  | Full details and comments of one card       |
+  | `create_card`        | write | Create an Epic, Story, Task or Sub-task (used in PO-03) |
   | `update_card_status` | write | Move a card to another column               |
   | `add_comment`        | write | Append a comment to a card                  |
 
